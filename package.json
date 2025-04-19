@@ -19,5 +19,10 @@
     "react-dom": "^18.2.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.4"
+  },
+  "dependencies": {
+    "@react-spring/web": "^9.7.5",
+    "gsap": "^3.12.7",
+    "react-intersection-observer": "^9.16.0"
   }
 }
