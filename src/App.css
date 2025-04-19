@@ -1,9 +1,62 @@
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .portal-container {
   min-height: 100vh;
-  background: rgb(4, 0, 53);
+  background: rgb(2, 0, 36);
+  background: linear-gradient(180deg, rgb(4, 0, 53) 0%, rgb(2, 0, 36) 100%);
   color: white;
-  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+.login-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .hero-section {
@@ -13,63 +66,105 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
-.glow-arc {
+.glow-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.glow-line {
   position: absolute;
   width: 80%;
-  height: 400px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 2px solid #fff;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: glowArc 3s ease-in-out infinite;
+  animation: glowLine 3s infinite;
 }
 
-.hero-title {
-  font-size: 6rem;
-  letter-spacing: 2rem;
+.glow-circle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: glowPulse 3s infinite;
+}
+
+.animated-text {
+  display: flex;
+  gap: 1rem;
   margin-bottom: 2rem;
-  position: relative;
-  z-index: 1;
+}
+
+.letter {
+  font-size: 5rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.letter.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: normal;
   margin-bottom: 2rem;
   opacity: 0.8;
 }
 
-.portal-button {
-  padding: 1rem 2rem;
-  background: transparent;
-  border: 2px solid #fff;
-  color: white;
+.install-button {
+  background: white;
+  color: rgb(4, 0, 53);
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 25px;
   font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 30px;
+  transition: all 0.3s;
+  margin-bottom: 1rem;
 }
 
-.portal-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+.install-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
 }
 
-@keyframes glowArc {
+.guarantee {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+@keyframes glowLine {
   0%, 100% {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+    width: 60%;
   }
   50% {
-    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4);
-    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.8;
+    width: 80%;
   }
 }
 
-.content-section {
-  min-height: 100vh;
-  padding: 2rem;
+@keyframes glowPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 }
