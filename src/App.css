@@ -68,16 +68,19 @@
 }
 
 .section-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   backdrop-filter: blur(10px);
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .section-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .card-content {
@@ -118,17 +121,22 @@ input {
 .action-btn {
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(45deg, #3490dc, #6574cd);
+  background: linear-gradient(45deg, #FF3366, #FF6B6B);
   border: none;
   border-radius: 12px;
   color: white;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .action-btn:hover {
-  opacity: 0.9;
+  background: linear-gradient(45deg, #FF6B6B, #FF3366);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
 }
 
 .card-stats {
