@@ -82,8 +82,10 @@ export default function App() {
 
   return (
     <div ref={mainRef} className="portal-container">
-      <div className="stars"></div>
-      <div className="twinkling"></div>
+      <video autoPlay muted loop className="background-video">
+        <source src="150517-798441456_medium.mp4" type="video/mp4" />
+      </video>
+      <div className="overlay"></div>
 
       <section className="hero-section">
         <h1 className="hero-title">
@@ -118,9 +120,23 @@ export default function App() {
 
       <section className="liquidity-section" ref={liquidityRef}>
         <div className="content-wrapper">
-          <div className="text-content">
+          <div className="text-content animate-content">
             <h2>Add Liquidity to the Pool</h2>
-            <p>Become a Liquidity Provider and earn rewards by contributing to our DEX pools. Help build a more efficient and decentralized trading ecosystem.</p>
+            <p className="main-description">Become a Liquidity Provider and earn rewards by contributing to our DEX pools. Help build a more efficient and decentralized trading ecosystem.</p>
+            <div className="benefits-list">
+              <div className="benefit-item">
+                <span className="icon">💰</span>
+                <p>Earn passive income through trading fees</p>
+              </div>
+              <div className="benefit-item">
+                <span className="icon">📈</span>
+                <p>Participate in yield farming opportunities</p>
+              </div>
+              <div className="benefit-item">
+                <span className="icon">🔄</span>
+                <p>Automatic reward distribution</p>
+              </div>
+            </div>
           </div>
           <div className="input-content">
             <div className="input-box">
@@ -134,9 +150,23 @@ export default function App() {
 
       <section className="swap-section" ref={swapRef}>
         <div className="content-wrapper">
-          <div className="text-content">
+          <div className="text-content animate-content">
             <h2>Swap Tokens</h2>
-            <p>Trade tokens instantly with our advanced DEX. Experience fast, secure, and low-fee transactions powered by smart contracts.</p>
+            <p className="main-description">Trade tokens instantly with our advanced DEX. Experience fast, secure, and low-fee transactions powered by smart contracts.</p>
+            <div className="features-list">
+              <div className="feature-item">
+                <span className="icon">⚡</span>
+                <p>Lightning-fast transactions</p>
+              </div>
+              <div className="feature-item">
+                <span className="icon">💎</span>
+                <p>Best price routing</p>
+              </div>
+              <div className="feature-item">
+                <span className="icon">🛡️</span>
+                <p>Anti-slippage protection</p>
+              </div>
+            </div>
           </div>
           <div className="input-content">
             <div className="input-box">
