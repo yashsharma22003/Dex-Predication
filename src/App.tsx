@@ -95,8 +95,9 @@ export default function App() {
         </h1>
         <p className="hero-subtitle">DEX + Prediction Market</p>
         <div className="portal-description" ref={descriptionRef}>
-          <p>Welcome to the future of decentralized finance. Our Web3 Portal combines the power of a 
-             decentralized exchange with an innovative prediction market platform.</p>
+          <p>Step into the future of DeFi with our revolutionary Web3 Portal. Experience seamless trading, 
+             high-yield liquidity provision, and precision market predictions - all in one powerful platform. 
+             Powered by cutting-edge blockchain technology, we're redefining what's possible in decentralized finance.</p>
           <div className="feature-grid">
             <div className="feature-item">
               <h3>🔒 Secure Trading</h3>
