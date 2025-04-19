@@ -1,16 +1,15 @@
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
+import './App.css';
 
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import './App.css'
-
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
-  const mainRef = useRef(null)
-  const liquidityRef = useRef(null)
-  const swapRef = useRef(null)
-  const predictionRef = useRef(null)
+  const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const navigationRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -21,115 +20,88 @@ export default function App() {
         stagger: 0.1,
         duration: 1,
         ease: 'power4.out'
-      })
+      });
 
-      // Liquidity section
-      gsap.from(liquidityRef.current, {
+      // Features animation
+      gsap.from('.feature-card', {
         scrollTrigger: {
-          trigger: liquidityRef.current,
+          trigger: '.features-section',
           start: 'top center',
           toggleActions: 'play none none reverse'
         },
+        y: 50,
         opacity: 0,
-        x: -100,
+        stagger: 0.2,
         duration: 1
-      })
+      });
+    });
 
-      // Swap section
-      gsap.from(swapRef.current, {
-        scrollTrigger: {
-          trigger: swapRef.current,
-          start: 'top center',
-          toggleActions: 'play none none reverse'
-        },
-        opacity: 0,
-        x: -100,
-        duration: 1
-      })
-
-      // Prediction section
-      gsap.from(predictionRef.current, {
-        scrollTrigger: {
-          trigger: predictionRef.current,
-          start: 'top center',
-          toggleActions: 'play none none reverse'
-        },
-        opacity: 0,
-        x: -100,
-        duration: 1
-      })
-    }, mainRef)
-
-    return () => ctx.revert()
-  }, [])
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div ref={mainRef} className="portal-container">
-      <div className="stars"></div>
-      <div className="twinkling"></div>
+    <div className="app-container">
+      <nav ref={navigationRef} className="navigation">
+        <div className="nav-logo">ArgusDEX</div>
+        <div className="nav-links">
+          <a href="#home">Home</a>
+          <a href="#dex">DEX</a>
+          <a href="#predictions">Predictions</a>
+          <a href="#blog">Blog</a>
+          <a href="#support">Support</a>
+          <button className="connect-wallet">Connect Wallet</button>
+        </div>
+      </nav>
 
-      <section className="hero-section">
+      <section ref={heroRef} className="hero-section">
         <h1 className="hero-title">
-          {Array.from("WEB3 PORTAL").map((char, i) => (
-            <span key={i}>{char}</span>
+          {Array.from("ARGUSDEX").map((char, i) => (
+            <span key={i} className="hero-letter">{char}</span>
           ))}
         </h1>
-        <p className="hero-subtitle">DEX + Prediction Market</p>
+        <p className="hero-subtitle">The Decentralized Exchange That Simply Works</p>
+        <motion.button 
+          className="launch-button"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Launch DEX
+        </motion.button>
       </section>
 
-      <section className="liquidity-section" ref={liquidityRef}>
-        <div className="content-wrapper">
-          <div className="text-content">
-            <h2>Add Liquidity to the Pool</h2>
-            <p>Become a Liquidity Provider and earn rewards by contributing to our DEX pools. Help build a more efficient and decentralized trading ecosystem.</p>
-          </div>
-          <div className="input-content">
-            <div className="input-box">
-              <input type="text" placeholder="Token Amount" />
-              <input type="text" placeholder="Token Amount" />
-              <button className="action-button">Add Liquidity</button>
-            </div>
-          </div>
+      <section ref={featuresRef} className="features-section">
+        <div className="feature-card dex-pool">
+          <h2>DEX Pool</h2>
+          <ul>
+            <li>Uniswap V3-style Liquidity</li>
+            <li>Real-Time Oracle Pricing</li>
+            <li>Custom Tick Ranges</li>
+          </ul>
+        </div>
+
+        <div className="feature-card predictions">
+          <h2>Prediction Market</h2>
+          <ul>
+            <li>Bet on Price Movements</li>
+            <li>Trustless Settlements</li>
+            <li>Powered by Flare FTSO</li>
+          </ul>
         </div>
       </section>
 
-      <section className="swap-section" ref={swapRef}>
-        <div className="content-wrapper">
-          <div className="text-content">
-            <h2>Swap Tokens</h2>
-            <p>Trade tokens instantly with our advanced DEX. Experience fast, secure, and low-fee transactions powered by smart contracts.</p>
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="social-links">
+            <a href="#twitter">Twitter</a>
+            <a href="#discord">Discord</a>
+            <a href="#telegram">Telegram</a>
           </div>
-          <div className="input-content">
-            <div className="input-box">
-              <input type="text" placeholder="From Token" />
-              <input type="text" placeholder="To Token" />
-              <button className="action-button">Swap</button>
-            </div>
-          </div>
+          <p className="disclaimer">
+            Trading crypto assets involves significant risk. Always DYOR.
+          </p>
+          <p className="guarantee">30-day money-back guarantee on trading fees</p>
         </div>
-      </section>
-
-      <section className="prediction-section" ref={predictionRef}>
-        <div className="content-wrapper">
-          <div className="text-content">
-            <h2>Prediction Market</h2>
-            <p>Participate in decentralized predictions for FLR token price movements.</p>
-          </div>
-          <div className="prediction-content">
-            <div className="prediction-card">
-              <h3>Will FLR token price increase by 20% this month?</h3>
-              <div className="prediction-buttons">
-                <button className="yes-button">Yes</button>
-                <button className="no-button">No</button>
-              </div>
-              <div className="prediction-stats">
-                <div>Current Pool: 1000 FLR</div>
-                <div>Time Left: 5d 12h</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </footer>
     </div>
-  )
+  );
 }
