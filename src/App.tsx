@@ -94,12 +94,10 @@ export default function App() {
           ))}
         </h1>
         <p className="hero-subtitle">Next-Gen DeFi Platform</p>
-        <div className="top-description" ref={descriptionRef}>
+        <div className="portal-description glass-effect" ref={descriptionRef}>
+          <div className="highlight-badge">Revolutionary DeFi Solution</div>
           <p>Transform your trading experience with our cutting-edge DEX platform. Harness the power of AI-driven predictions, 
              seamless token swaps, and innovative yield strategies - all in one elegant interface.</p>
-        </div>
-        <div className="portal-description glass-effect">
-          <div className="highlight-badge">Revolutionary DeFi Solution</div>
           <div className="stats-container">
             <div className="stat-item">
               <span className="stat-value">$2.5B+</span>
