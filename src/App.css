@@ -1,2 +1,80 @@
-main {
+
+.portal-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  color: white;
+}
+
+.portal-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.left-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.right-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.portal-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #61dafb;
+}
+
+.portal-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.portal-input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid #61dafb;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.portal-input:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(97, 218, 251, 0.3);
+}
+
+.portal-button {
+  padding: 1rem 2rem;
+  background: #61dafb;
+  border: none;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.portal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(97, 218, 251, 0.4);
 }
