@@ -11,16 +11,33 @@ export default function App() {
   const liquidityRef = useRef(null)
   const swapRef = useRef(null)
   const predictionRef = useRef(null)
+  const descriptionRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero animation
+      // Hero animation with enhanced effects
       gsap.from('.hero-title span', {
         y: 100,
         opacity: 0,
         stagger: 0.1,
         duration: 1,
         ease: 'power4.out'
+      })
+
+      gsap.from('.hero-subtitle', {
+        scale: 0,
+        opacity: 0,
+        duration: 1,
+        delay: 1,
+        ease: 'elastic.out'
+      })
+
+      gsap.from('.portal-description', {
+        x: -100,
+        opacity: 0,
+        duration: 1,
+        delay: 1.5,
+        ease: 'back.out'
       })
 
       // Liquidity section
@@ -75,6 +92,28 @@ export default function App() {
           ))}
         </h1>
         <p className="hero-subtitle">DEX + Prediction Market</p>
+        <div className="portal-description" ref={descriptionRef}>
+          <p>Welcome to the future of decentralized finance. Our Web3 Portal combines the power of a 
+             decentralized exchange with an innovative prediction market platform.</p>
+          <div className="feature-grid">
+            <div className="feature-item">
+              <h3>🔒 Secure Trading</h3>
+              <p>Built on blockchain technology for maximum security and transparency</p>
+            </div>
+            <div className="feature-item">
+              <h3>⚡ Lightning Fast</h3>
+              <p>Experience near-instant transactions with minimal fees</p>
+            </div>
+            <div className="feature-item">
+              <h3>🎯 Smart Predictions</h3>
+              <p>Make informed decisions with our advanced prediction markets</p>
+            </div>
+            <div className="feature-item">
+              <h3>💧 Deep Liquidity</h3>
+              <p>Access deep liquidity pools for seamless trading</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="liquidity-section" ref={liquidityRef}>
