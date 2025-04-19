@@ -93,12 +93,25 @@ export default function App() {
             <span key={i}>{char}</span>
           ))}
         </h1>
-        <p className="hero-subtitle">DEX + Prediction Market</p>
-        <div className="portal-description" ref={descriptionRef}>
-          <p>Welcome to the next evolution of DeFi - where trading meets prediction markets. Our Web3 Portal 
-             combines lightning-fast DEX capabilities with AI-powered market predictions. Earn passive income 
-             through liquidity provision while participating in cutting-edge prediction markets. Experience 
-             the future of decentralized trading with institutional-grade security and unmatched execution speed.</p>
+        <p className="hero-subtitle">Next-Gen DeFi Platform</p>
+        <div className="portal-description glass-effect" ref={descriptionRef}>
+          <div className="highlight-badge">Revolutionary DeFi Solution</div>
+          <p>Transform your trading experience with our cutting-edge DEX platform. Harness the power of AI-driven predictions, 
+             seamless token swaps, and innovative yield strategies - all in one elegant interface.</p>
+          <div className="stats-container">
+            <div className="stat-item">
+              <span className="stat-value">$2.5B+</span>
+              <span className="stat-label">Total Volume</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">100k+</span>
+              <span className="stat-label">Active Traders</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">0.1%</span>
+              <span className="stat-label">Low Fees</span>
+            </div>
+          </div>
           <div className="feature-grid">
             <div className="feature-item">
               <h3>🔒 Secure Trading</h3>
