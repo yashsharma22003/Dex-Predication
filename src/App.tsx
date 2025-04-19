@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -8,72 +7,35 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function App() {
   const mainRef = useRef(null)
-  const liquidityRef = useRef(null)
-  const swapRef = useRef(null)
-  const predictionRef = useRef(null)
   const descriptionRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero animation with enhanced effects
-      gsap.from('.hero-title span', {
-        y: 100,
+      gsap.from('.hero-text span', {
         opacity: 0,
-        stagger: 0.1,
+        y: 100,
         duration: 1,
+        stagger: 0.1,
         ease: 'power4.out'
       })
 
-      gsap.from('.hero-subtitle', {
-        scale: 0,
+      gsap.from('.hero-description', {
         opacity: 0,
+        y: 50,
         duration: 1,
-        delay: 1,
-        ease: 'elastic.out'
+        delay: 0.5
       })
 
-      gsap.from('.portal-description', {
-        x: -100,
+      gsap.from('.section-card', {
+        scrollTrigger: {
+          trigger: '.section-card',
+          start: 'top center+=100',
+          toggleActions: 'play none none reverse'
+        },
         opacity: 0,
+        y: 100,
         duration: 1,
-        delay: 1.5,
-        ease: 'back.out'
-      })
-
-      // Liquidity section
-      gsap.from(liquidityRef.current, {
-        scrollTrigger: {
-          trigger: liquidityRef.current,
-          start: 'top center',
-          toggleActions: 'play none none reverse'
-        },
-        opacity: 0,
-        x: -100,
-        duration: 1
-      })
-
-      // Swap section
-      gsap.from(swapRef.current, {
-        scrollTrigger: {
-          trigger: swapRef.current,
-          start: 'top center',
-          toggleActions: 'play none none reverse'
-        },
-        opacity: 0,
-        x: -100,
-        duration: 1
-      })
-
-      // Prediction section
-      gsap.from(predictionRef.current, {
-        scrollTrigger: {
-          trigger: predictionRef.current,
-          start: 'top center',
-          toggleActions: 'play none none reverse'
-        },
-        opacity: 0,
-        x: -100,
-        duration: 1
+        stagger: 0.2
       })
     }, mainRef)
 
@@ -81,139 +43,88 @@ export default function App() {
   }, [])
 
   return (
-    <div ref={mainRef} className="portal-container">
+    <div ref={mainRef} className="app-container">
       <video autoPlay muted loop className="background-video">
         <source src="150517-798441456_medium.mp4" type="video/mp4" />
       </video>
-      <div className="overlay"></div>
 
-      <section className="hero-section">
-        <h1 className="hero-title">
-          {Array.from("WEB3 PORTAL").map((char, i) => (
-            <span key={i}>{char}</span>
-          ))}
-        </h1>
-        <p className="hero-subtitle">Next-Gen DeFi Platform</p>
-        <div className="portal-description glass-effect" ref={descriptionRef}>
-          <div className="highlight-badge">Revolutionary DeFi Solution</div>
-          <p>Transform your trading experience with our cutting-edge DEX platform. Harness the power of AI-driven predictions, 
-             seamless token swaps, and innovative yield strategies - all in one elegant interface.</p>
-          <div className="stats-container">
-            <div className="stat-item">
-              <span className="stat-value">$2.5B+</span>
-              <span className="stat-label">Total Volume</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">100k+</span>
-              <span className="stat-label">Active Traders</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">0.1%</span>
-              <span className="stat-label">Low Fees</span>
-            </div>
-          </div>
-          <div className="feature-grid">
-            <div className="feature-item">
-              <h3>🔒 Secure Trading</h3>
-              <p>Built on blockchain technology for maximum security and transparency</p>
-            </div>
-            <div className="feature-item">
-              <h3>⚡ Lightning Fast</h3>
-              <p>Experience near-instant transactions with minimal fees</p>
-            </div>
-            <div className="feature-item">
-              <h3>🎯 Smart Predictions</h3>
-              <p>Make informed decisions with our advanced prediction markets</p>
-            </div>
-            <div className="feature-item">
-              <h3>💧 Deep Liquidity</h3>
-              <p>Access deep liquidity pools for seamless trading</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="content-container">
+        <header className="hero">
+          <h1 className="hero-text">
+            {Array.from("WEB3 PORTAL").map((char, i) => (
+              <span key={i}>{char}</span>
+            ))}
+          </h1>
+          <p className="hero-description">
+            Experience the future of decentralized finance with our cutting-edge platform
+          </p>
+        </header>
 
-      <section className="liquidity-section" ref={liquidityRef}>
-        <div className="content-wrapper">
-          <div className="text-content animate-content">
-            <h2>Add Liquidity to the Pool</h2>
-            <p className="main-description">Become a Liquidity Provider and earn rewards by contributing to our DEX pools. Help build a more efficient and decentralized trading ecosystem.</p>
-            <div className="benefits-list">
-              <div className="benefit-item">
-                <span className="icon">💰</span>
-                <p>Earn passive income through trading fees</p>
+        <div className="features-grid">
+          <div className="section-card">
+            <div className="card-content">
+              <h2>Add Liquidity</h2>
+              <p>Provide liquidity to earn passive income through trading fees and rewards</p>
+              <div className="card-actions">
+                <input type="text" placeholder="Token Amount" />
+                <input type="text" placeholder="Token Amount" />
+                <button className="action-btn">Add Liquidity</button>
               </div>
-              <div className="benefit-item">
-                <span className="icon">📈</span>
-                <p>Participate in yield farming opportunities</p>
-              </div>
-              <div className="benefit-item">
-                <span className="icon">🔄</span>
-                <p>Automatic reward distribution</p>
+              <div className="card-stats">
+                <div className="stat">
+                  <span className="value">$2.5M</span>
+                  <span className="label">Total Locked</span>
+                </div>
+                <div className="stat">
+                  <span className="value">12%</span>
+                  <span className="label">APY</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="input-content">
-            <div className="input-box">
-              <input type="text" placeholder="Token Amount" />
-              <input type="text" placeholder="Token Amount" />
-              <button className="action-button">Add Liquidity</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="swap-section" ref={swapRef}>
-        <div className="content-wrapper">
-          <div className="text-content animate-content">
-            <h2>Swap Tokens</h2>
-            <p className="main-description">Trade tokens instantly with our advanced DEX. Experience fast, secure, and low-fee transactions powered by smart contracts.</p>
-            <div className="features-list">
-              <div className="feature-item">
-                <span className="icon">⚡</span>
-                <p>Lightning-fast transactions</p>
+          <div className="section-card">
+            <div className="card-content">
+              <h2>Swap Tokens</h2>
+              <p>Trade tokens instantly with optimal pricing and minimal slippage</p>
+              <div className="card-actions">
+                <input type="text" placeholder="From Token" />
+                <div className="swap-arrow">↓</div>
+                <input type="text" placeholder="To Token" />
+                <button className="action-btn">Swap Now</button>
               </div>
-              <div className="feature-item">
-                <span className="icon">💎</span>
-                <p>Best price routing</p>
-              </div>
-              <div className="feature-item">
-                <span className="icon">🛡️</span>
-                <p>Anti-slippage protection</p>
+              <div className="card-stats">
+                <div className="stat">
+                  <span className="value">0.1%</span>
+                  <span className="label">Fee</span>
+                </div>
+                <div className="stat">
+                  <span className="value">$1M+</span>
+                  <span className="label">Volume 24h</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="input-content">
-            <div className="input-box">
-              <input type="text" placeholder="From Token" />
-              <input type="text" placeholder="To Token" />
-              <button className="action-button">Swap</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="prediction-section" ref={predictionRef}>
-        <div className="content-wrapper">
-          <div className="text-content">
-            <h2>Prediction Market</h2>
-            <p>Participate in decentralized predictions for FLR token price movements.</p>
-          </div>
-          <div className="prediction-content">
-            <div className="prediction-card">
-              <h3>Will FLR token price increase by 20% this month?</h3>
-              <div className="prediction-buttons">
-                <button className="yes-button">Yes</button>
-                <button className="no-button">No</button>
-              </div>
-              <div className="prediction-stats">
-                <div>Current Pool: 1000 FLR</div>
-                <div>Time Left: 5d 12h</div>
+          <div className="section-card">
+            <div className="card-content">
+              <h2>Prediction Market</h2>
+              <p>Trade on future price movements with AI-powered insights</p>
+              <div className="prediction-box">
+                <h3>FLR Price Prediction</h3>
+                <div className="prediction-actions">
+                  <button className="up-btn">Up ↑</button>
+                  <button className="down-btn">Down ↓</button>
+                </div>
+                <div className="prediction-info">
+                  <span>Prize Pool: 1000 FLR</span>
+                  <span>Ends in: 5h 30m</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
