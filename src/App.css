@@ -46,12 +46,72 @@
   letter-spacing: -2px;
   display: flex;
   gap: 1rem;
-  background: linear-gradient(to right, #fff, #a5a5a5);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  /* Base Gradient */
+  background: linear-gradient(90deg,
+      #6e45e2 0%,
+      #88d3ce 30%,
+      #f8b195 70%,
+      #ff847c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 2rem;
-}
+
+  /* Animation */
+  background-size: 300% 300%;
+  animation:
+    gradientPulse 8s ease infinite,
+    textReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  /* Glow Effect */
+  text-shadow: 0 0 10px rgba(110, 69, 226, 0.3),
+    0 0 20px rgba(136, 211, 206, 0.2);
+
+  /* Individual Character Animation */
+  span {
+    display: inline-block;
+    transform: translateY(100%);
+    opacity: 0;
+    animation: charReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(0.1s + (var(--char-index) * 0.05s));
+    }
+  }
+
+  @keyframes gradientPulse {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes textReveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes charReveal {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
 .hero-description {
   font-size: 1.5rem;
@@ -183,7 +243,8 @@ input {
   margin-bottom: 1.5rem;
 }
 
-.up-btn, .down-btn {
+.up-btn,
+.down-btn {
   padding: 1rem;
   border: none;
   border-radius: 12px;
@@ -219,5 +280,669 @@ input {
 
   .features-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Add these to your existing App.css */
+
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0) translateX(-50%);
+  }
+
+  40% {
+    transform: translateY(-20px) translateX(-50%);
+  }
+
+  60% {
+    transform: translateY(-10px) translateX(-50%);
+  }
+}
+
+.section-container {
+  min-height: 100vh;
+  padding: 80px 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.section-container.full-width {
+  padding: 120px 0;
+}
+
+.section-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.section-content.reverse {
+  grid-template-columns: 1fr 1fr;
+  gap: 300px;
+}
+
+.section-content.reverse>div:first-child {
+  order: 2;
+}
+
+.section-content.reverse>div:last-child {
+  order: 1;
+}
+
+.liquidity-description,
+.swap-description {
+  color: white;
+  max-width: 500px;
+}
+
+.liquidity-description h2,
+.swap-description h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00dbde, #fc00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, #00dbde, #fc00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.prediction-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.prediction-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 16px;
+  margin-top: 30px;
+}
+
+.price-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.current-price {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.price-change {
+  font-size: 1.2rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.price-change.positive {
+  background: rgba(0, 255, 0, 0.1);
+  color: #00ff00;
+}
+
+.price-change.negative {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
+}
+
+.prediction-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info-item .label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.info-item .value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.chart-placeholder {
+  height: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.7);
+  }
+
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(0, 219, 222, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 219, 222, 0);
+  }
+}
+/* Add these to your existing App.css */
+
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0) translateX(-50%);
+  }
+
+  40% {
+    transform: translateY(-20px) translateX(-50%);
+  }
+
+  60% {
+    transform: translateY(-10px) translateX(-50%);
+  }
+}
+
+.section-container {
+  min-height: 100vh;
+  padding: 80px 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.section-container.full-width {
+  padding: 120px 0;
+}
+
+.section-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.section-content.reverse {
+  grid-template-columns: 1fr 1fr;
+}
+
+.section-content.reverse>div:first-child {
+  order: 2;
+}
+
+.section-content.reverse>div:last-child {
+  order: 1;
+}
+
+.liquidity-description,
+.swap-description {
+  color: white;
+  max-width: 500px;
+}
+
+.liquidity-description h2,
+.swap-description h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00dbde, #fc00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, #00dbde, #fc00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.prediction-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.prediction-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 16px;
+  margin-top: 30px;
+}
+
+.price-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.current-price {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.price-change {
+  font-size: 1.2rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.price-change.positive {
+  background: rgba(0, 255, 0, 0.1);
+  color: #00ff00;
+}
+
+.price-change.negative {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
+}
+
+.prediction-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info-item .label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.info-item .value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.chart-placeholder {
+  height: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.7);
+  }
+
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(0, 219, 222, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 219, 222, 0);
+  }
+}
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #6e45e2 0%, #88d3ce 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-links button:hover {
+  color: #88d3ce;
+}
+
+.nav-links button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6e45e2 0%, #88d3ce 100%);
+  transition: width 0.3s ease;
+}
+
+.nav-links button:hover::after {
+  width: 70%;
+}
+
+/* Intro Section Styles */
+.intro-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 80px;
+  /* Account for navbar */
+}
+
+.intro-content h2 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #ffffff, #a5a5a5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.intro-content p {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Ensure content is below navbar */
+.hero-section {
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+}
+/* Prediction Section Styles */
+.full-width {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: rgba(15, 15, 30, 0.9);
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #00f0ff, #5f72ff, #9b52ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.prediction-cards-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.prediction-card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.prediction-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
+.prediction-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.up-btn,
+.down-btn {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.up-btn {
+  background: linear-gradient(135deg, #2ecc71 0%, #1abc9c 100%);
+  color: #ffffff;
+  
+}
+
+.down-btn {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #ffffff;
+}
+
+.up-btn:hover {
+  background: rgba(0, 200, 83, 0.2);
+}
+
+.down-btn:hover {
+  background: rgba(255, 50, 50, 0.2);
+}
+
+.odds {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.prediction-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.value {
+  color: white;
+  font-weight: 500;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .prediction-cards-container {
+    flex-wrap: wrap;
+  }
+
+  .prediction-card {
+    min-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .prediction-card {
+    min-width: 100%;
   }
 }
