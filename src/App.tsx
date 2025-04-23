@@ -7,7 +7,8 @@ import './App.css';
 import { useAccount, useConnect, useDisconnect, useWriteContract } from 'wagmi';
 import { injected } from 'wagmi/connectors'; 
 import { parseEther } from 'viem'; 
-
+import { simulateContract, writeContract } from 'wagmi/actions';
+import { config  } from './index';
 
 
 const LIQUIDITY_POOL_ABI = [
@@ -790,8 +791,8 @@ const PREDICTION_MARKET_ABI = [  ] as const;
 const PREDICTION_MARKET_ADDRESS = '0x...'; 
 
 
-const TOKEN_A_ADDRESS = '0xA50D9Da9dd27f00De39361d79A44263bA70F4595';
-const TOKEN_B_ADDRESS = '0xf0a32C6829436103CE9Bbcef37Aa706de01107Fd';
+const TOKEN_A_ADDRESS = '0x63599aE00A7A43FaDBc2B72E1390ccbCdd0d455B';
+const TOKEN_B_ADDRESS = '0x81960374004ca95499a720027f76c04871e0DFC2';
 
 const ERC20_ABI = [
   { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "approve", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" },
@@ -962,65 +963,45 @@ export default function App() {
 
 
   const handleAddLiquidity = async () => {
-    if (!isConnected || !address) {
-      alert("Please connect your wallet first.");
-      return;
-    }
-    if (!tokenAAmount || !tokenBAmount || isNaN(parseFloat(tokenAAmount)) || isNaN(parseFloat(tokenBAmount)) || parseFloat(tokenAAmount) <= 0 || parseFloat(tokenBAmount) <= 0) {
-      alert("Please enter valid, positive amounts for both tokens.");
-      return;
-    }
-    if (!LIQUIDITY_POOL_ADDRESS || !TOKEN_A_ADDRESS || !TOKEN_B_ADDRESS) {
-      alert("Contract details or token addresses are missing.");
-      return;
-    }
-
-    console.log(`Attempting to add liquidity: ${tokenAAmount} Token A (${TOKEN_A_ADDRESS}), ${tokenBAmount} Token B (${TOKEN_B_ADDRESS})`);
-
-
-    alert("Placeholder: In a real app, ensure token approvals are confirmed before proceeding."); // Remove this in production
-
-
-    // Assuming approvals are done (needs proper implementation)
-    try {
-      // --- TODO: Adjust functionName and args based on your actual contract ---
-     
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
-      const amountADesired = parseEther(tokenAAmount); // Assumes 18 decimals
-      const amountBDesired = parseEther(tokenBAmount); // Assumes 18 decimals
-      // WARNING: Slippage calculation below is basic (1%). Needs proper price ratio check.
-      const amountAMin = parseEther((parseFloat(tokenAAmount) * 0.99).toString());
-      const amountBMin = parseEther((parseFloat(tokenBAmount) * 0.99).toString());
-
-     const tx = await writeContractAsync({
-        abi: LIQUIDITY_POOL_ABI,
-        address: LIQUIDITY_POOL_ADDRESS as `0x${string}`,
-        functionName: 'addLiquidity', // Replace with your contract's exact function name
-        args: [
-          TOKEN_A_ADDRESS as `0x${string}`, // Example arg: tokenA
-          TOKEN_B_ADDRESS as `0x${string}`, // Example arg: tokenB
-          amountADesired,
-          amountBDesired,
-          amountAMin,
-          amountBMin,
-          address, // Recipient of LP tokens
-          BigInt(deadline)
-        ],
+	try {
+	  const amountADesired = parseEther(tokenAAmount);
+	  const amountBDesired = parseEther(tokenBAmount);
+	  const amountAMin = parseEther((parseFloat(tokenAAmount) * 0.99).toString());
+	  const amountBMin = parseEther((parseFloat(tokenBAmount) * 0.99).toString());
+	  const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
   
-        // chainId: chain?.id // Optional: specify chain if needed
-      });
-
-      console.log("Transaction", tx);
-      console.log("Add liquidity transaction sent...");
-      // Clear inputs on successful send (optional)
-      // setTokenAAmount('');
-      // setTokenBAmount('');
-
-    } catch (error) {
-      console.error("Error preparing add liquidity transaction:", error);
-      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+	  // 🧪 Step 1: Simulate to detect errors early
+	  const { request, result } = await simulateContract(config,{
+		abi: LIQUIDITY_POOL_ABI,
+		address: LIQUIDITY_POOL_ADDRESS,
+		functionName: 'addLiquidity',
+		args: [
+		  TOKEN_A_ADDRESS,
+		  TOKEN_B_ADDRESS,
+		  amountADesired,
+		  amountBDesired,
+		  amountAMin,
+		  amountBMin,
+		  address as `0x${string}`,
+		  BigInt(deadline)
+		],
+		account: address as `0x${string}`, // 👈 wagmi needs a string literal type here
+	  });
+	  
+  
+	  console.log("Simulation result:", result);
+  
+	  // 🚀 Step 2: Send transaction
+	  const txHash = await writeContract(request);
+	  console.log("Transaction sent:", txHash);
+  
+	} catch (error) {
+	  console.error("Error during simulation or transaction:", error);
+	//   alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+	}
   };
+  
+  
 
   const handleSwap = async () => {
     if (!isConnected || !address) {

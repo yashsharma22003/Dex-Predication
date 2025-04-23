@@ -15,7 +15,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 // 2. Configure chains and transports for Wagmi config
-const config = createConfig({
+export const config = createConfig({
   chains: [mainnet, sepolia, flareTestnet], // Add chains relevant to your app
   connectors: [
     injected(), // MetaMask, Brave Wallet, etc.
