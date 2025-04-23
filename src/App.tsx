@@ -6,18 +6,20 @@ import './App.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
-  const mainRef = useRef(null);
-  const navRef = useRef(null);
-  const heroRef = useRef(null);
-  const introRef = useRef(null);
-  const liquiditySectionRef = useRef(null);
-  const swapSectionRef = useRef(null);
-  const predictionSectionRef = useRef(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const introRef = useRef<HTMLDivElement | null>(null);
+  const liquiditySectionRef = useRef<HTMLDivElement | null>(null);
+  const swapSectionRef = useRef<HTMLDivElement | null>(null);
+  const predictionSectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Navbar background change on scroll
     const handleScroll = () => {
       const nav = navRef.current;
+      if (!nav) return;
+
       if (window.scrollY > 100) {
         nav.style.backgroundColor = "rgba(10, 10, 20, 0.9)";
         nav.style.backdropFilter = "blur(10px)";
