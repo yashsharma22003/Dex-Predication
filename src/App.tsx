@@ -118,7 +118,7 @@ export default function App() {
     };
   }, []);
 
-  const scrollToSection = (ref) => {
+  const scrollToSection = (ref :any) => {
     window.scrollTo({
       top: ref.current.offsetTop,
       behavior: 'smooth'
