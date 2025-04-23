@@ -22,10 +22,12 @@ export default function App() {
 
       if (window.scrollY > 100) {
         nav.style.backgroundColor = "rgba(10, 10, 20, 0.9)";
-        nav.style.backdropFilter = "blur(10px)";
+        (nav.style as any).backdropFilter = "blur(10px)";
+
       } else {
         nav.style.backgroundColor = "transparent";
-        nav.style.backdropFilter = "none";
+        (nav.style as any).backdropFilter = "none";
+
       }
     };
 
