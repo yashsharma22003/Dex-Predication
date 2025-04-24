@@ -5,10 +5,12 @@ import './App.css';
 
 // --- Web3 Imports ---
 import { useAccount, useConnect, useDisconnect, useWriteContract } from 'wagmi';
+import { readContract } from '@wagmi/core';
 import { injected } from 'wagmi/connectors'; 
 import { parseEther } from 'viem'; 
-import { simulateContract, writeContract } from 'wagmi/actions';
-import { config  } from './index';
+import { formatEther } from 'viem';
+import { config } from '@react-spring/web';
+
 
 
 const LIQUIDITY_POOL_ABI = [
@@ -784,8 +786,778 @@ const LIQUIDITY_POOL_ABI = [
 ] as const;
 const LIQUIDITY_POOL_ADDRESS = '0xEC9Bf10d059Aa5307F1B721eA3036477127Df4bd'; 
 
-const TOKEN_SWAP_ABI = [ ] as const;
-const TOKEN_SWAP_ADDRESS = '0x...'; 
+const TOKEN_SWAP_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_factory",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_WETH",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "WETH",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenA",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenB",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountADesired",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountBDesired",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountAMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountBMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "addLiquidity",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountB",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountTokenDesired",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountTokenMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETHMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "addLiquidityETH",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountToken",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETH",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "factory",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveOut",
+				"type": "uint256"
+			}
+		],
+		"name": "getAmountIn",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveOut",
+				"type": "uint256"
+			}
+		],
+		"name": "getAmountOut",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			}
+		],
+		"name": "getAmountsIn",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			}
+		],
+		"name": "getAmountsOut",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reserveB",
+				"type": "uint256"
+			}
+		],
+		"name": "quote",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountB",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenA",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenB",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountAMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountBMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "removeLiquidity",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountB",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountTokenMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETHMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "removeLiquidityETH",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountToken",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETH",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountTokenMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETHMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "approveMax",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint8",
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "removeLiquidityETHWithPermit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountToken",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountETH",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenA",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenB",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "liquidity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountAMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountBMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "approveMax",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint8",
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "removeLiquidityWithPermit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountA",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountB",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapETHForExactTokens",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapExactETHForTokens",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapExactTokensForETH",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapExactTokensForTokens",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountInMax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokensForExactETH",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountOut",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountInMax",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokensForExactTokens",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	}
+] as const;
+const TOKEN_SWAP_ADDRESS = '0xEC9Bf10d059Aa5307F1B721eA3036477127Df4bd'; 
 
 const PREDICTION_MARKET_ABI = [  ] as const;
 const PREDICTION_MARKET_ADDRESS = '0x...'; 
@@ -819,6 +1591,12 @@ export default function App() {
   const { data: writeContractResult, writeContract, isPending: isWritePending, error: writeError } = useWriteContract();
   const {writeContractAsync, isPending} = useWriteContract();
 
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [poolExists, setPoolExists] = useState(true);
+
+
+  const [swapToAmount, setSwapToAmount] = useState('');
+  const [isCalculatingSwap, setIsCalculatingSwap] = useState(false);
 
   // --- Component State ---
   const [tokenAAmount, setTokenAAmount] = useState('');
@@ -927,81 +1705,71 @@ export default function App() {
     };
   }, []); 
 
+
+
   // --- Smart Contract Interaction Functions ---
-
-  // Helper function for approvals (example)
-  const handleApprove = async (tokenAddress: string, spenderAddress: string, amount: string, decimals: number = 18) => {
-    if (!isConnected || !address) return false; // Should be checked before calling
-
-    // TODO: Check existing allowance first using useReadContract for optimization
-    // const { data: allowance } = useReadContract({ ... })
-    // if (allowance >= parsedAmount) return true;
-
-    console.log(`Approving ${amount} of token ${tokenAddress} for spender ${spenderAddress}`);
-    try {
-      // Assuming 'approve' function and ERC20 ABI
-      await writeContract({
-        abi: ERC20_ABI,
-        address: tokenAddress as `0x${string}`,
-        functionName: 'approve',
-        args: [
-          spenderAddress as `0x${string}`,
-          parseEther(amount) // Assumes 18 decimals, use parseUnits for others
-          // parseUnits(amount, decimals) // More general version
-        ],
-      });
- 
-      console.log("Approval transaction sent, waiting for confirmation...");
-    
-      return true; 
-    } catch (error) {
-      console.error("Approval Error:", error);
-      alert(`Approval Failed: ${error instanceof Error ? error.message : String(error)}`);
-      return false;
-    }
-  };
 
 
   const handleAddLiquidity = async () => {
-	try {
-	  const amountADesired = parseEther(tokenAAmount);
-	  const amountBDesired = parseEther(tokenBAmount);
-	  const amountAMin = parseEther((parseFloat(tokenAAmount) * 0.99).toString());
-	  const amountBMin = parseEther((parseFloat(tokenBAmount) * 0.99).toString());
-	  const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+    if (!isConnected || !address) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    if (!tokenAAmount || !tokenBAmount || isNaN(parseFloat(tokenAAmount)) || isNaN(parseFloat(tokenBAmount)) || parseFloat(tokenAAmount) <= 0 || parseFloat(tokenBAmount) <= 0) {
+      alert("Please enter valid, positive amounts for both tokens.");
+      return;
+    }
+    if (!LIQUIDITY_POOL_ADDRESS || !TOKEN_A_ADDRESS || !TOKEN_B_ADDRESS) {
+      alert("Contract details or token addresses are missing.");
+      return;
+    }
+
+    console.log(`Attempting to add liquidity: ${tokenAAmount} Token A (${TOKEN_A_ADDRESS}), ${tokenBAmount} Token B (${TOKEN_B_ADDRESS})`);
+
+
+    alert("Placeholder: In a real app, ensure token approvals are confirmed before proceeding."); // Remove this in production
+
+
+    // Assuming approvals are done (needs proper implementation)
+    try {
+      // --- TODO: Adjust functionName and args based on your actual contract ---
+     
+      const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
+      const amountADesired = parseEther(tokenAAmount); // Assumes 18 decimals
+      const amountBDesired = parseEther(tokenBAmount); // Assumes 18 decimals
+      // WARNING: Slippage calculation below is basic (1%). Needs proper price ratio check.
+      const amountAMin = parseEther((parseFloat(tokenAAmount) * 0.99).toString());
+      const amountBMin = parseEther((parseFloat(tokenBAmount) * 0.99).toString());
+
+     const tx = await writeContractAsync({
+        abi: LIQUIDITY_POOL_ABI,
+        address: LIQUIDITY_POOL_ADDRESS as `0x${string}`,
+        functionName: 'addLiquidity', // Replace with your contract's exact function name
+        args: [
+          TOKEN_A_ADDRESS as `0x${string}`, // Example arg: tokenA
+          TOKEN_B_ADDRESS as `0x${string}`, // Example arg: tokenB
+          amountADesired,
+          amountBDesired,
+          amountAMin,
+          amountBMin,
+          address, // Recipient of LP tokens
+          BigInt(deadline)
+        ],
   
-	  // 🧪 Step 1: Simulate to detect errors early
-	  const { request, result } = await simulateContract(config,{
-		abi: LIQUIDITY_POOL_ABI,
-		address: LIQUIDITY_POOL_ADDRESS,
-		functionName: 'addLiquidity',
-		args: [
-		  TOKEN_A_ADDRESS,
-		  TOKEN_B_ADDRESS,
-		  amountADesired,
-		  amountBDesired,
-		  amountAMin,
-		  amountBMin,
-		  address as `0x${string}`,
-		  BigInt(deadline)
-		],
-		account: address as `0x${string}`, // 👈 wagmi needs a string literal type here
-	  });
-	  
-  
-	  console.log("Simulation result:", result);
-  
-	  // 🚀 Step 2: Send transaction
-	  const txHash = await writeContract(request);
-	  console.log("Transaction sent:", txHash);
-  
-	} catch (error) {
-	  console.error("Error during simulation or transaction:", error);
-	//   alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
-	}
+        // chainId: chain?.id // Optional: specify chain if needed
+      });
+
+      console.log("Transaction", tx);
+      console.log("Add liquidity transaction sent...");
+      // Clear inputs on successful send (optional)
+      // setTokenAAmount('');
+      // setTokenBAmount('');
+
+    } catch (error) {
+      console.error("Error preparing add liquidity transaction:", error);
+      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
   };
-  
-  
 
   const handleSwap = async () => {
     if (!isConnected || !address) {
@@ -1012,10 +1780,7 @@ export default function App() {
       alert("Please enter a valid positive amount and ensure both tokens are selected.");
       return;
     }
-    if (!TOKEN_SWAP_ADDRESS || TOKEN_SWAP_ABI.length === 0) {
-      alert("Token swap contract details are missing.");
-      return;
-    }
+
     if (swapFromToken === swapToToken) {
         alert("Cannot swap a token for itself.");
         return;
@@ -1059,59 +1824,53 @@ export default function App() {
     }
   };
 
-  const handlePrediction = async (marketId: string, direction: 'up' | 'down') => {
-    if (!isConnected || !address) {
-      alert("Please connect your wallet first.");
-      return;
-    }
-    if (!PREDICTION_MARKET_ADDRESS || PREDICTION_MARKET_ABI.length === 0) {
-      alert("Prediction market contract details are missing.");
-      return;
-    }
 
-    // --- TODO: Determine the amount/stake and token for the prediction ---
-    // This might come from an input field or be fixed.
-    const predictionStakeAmount = '0.01'; // Example: 0.01 ETH or token
-    const stakeTokenAddress = 'NATIVE'; // Or an ERC20 address '0x...'
-    const IS_NATIVE_STAKE = stakeTokenAddress === 'NATIVE'; // Example flag
-
-    console.log(`Attempting prediction on market ${marketId}: ${direction} with stake ${predictionStakeAmount}`);
-
-   
-
-    if (!IS_NATIVE_STAKE) {
-        alert("Placeholder: In a real app, ensure token approval is confirmed before staking ERC20."); // Remove this
-    }
-
-
-    try {
-      // --- TODO: Adjust functionName and args based on your actual prediction contract ---
- 
-
-      const directionBool = direction === 'up';
-      const stakeAmountParsed = parseEther(predictionStakeAmount); // Assumes 18 decimals
-
-      writeContract({
-        abi: PREDICTION_MARKET_ABI,
-        address: PREDICTION_MARKET_ADDRESS as `0x${string}`,
-        functionName: 'makePrediction', // Replace with your contract's function name
-        args: [
-          marketId, // Ensure this matches the expected type (string? uint?)
-          directionBool,
-          // Add other args required by your contract.
-          // If staking ERC20, amount might be an argument:
-          // ...(IS_NATIVE_STAKE ? [] : [stakeAmountParsed]) // Example conditional args
-        ],
-        // --- TODO: Add `value` if staking native currency (e.g., ETH) ---
-        value: IS_NATIVE_STAKE ? stakeAmountParsed : undefined,
-      });
-      console.log(`Prediction (${direction}) transaction sent...`);
-
-    } catch (error) {
-      console.error("Error preparing prediction transaction:", error);
-      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+  const handleAmountOutCalculation = async () => {
+	if (!isConnected || !address) {
+	  alert("Please connect your wallet first.");
+	  return;
+	}
+  
+	if (
+	  !swapFromAmount ||
+	  isNaN(parseFloat(swapFromAmount)) ||
+	  parseFloat(swapFromAmount) <= 0 ||
+	  !swapFromToken ||
+	  !swapToToken
+	) {
+	  alert("Please enter a valid positive amount and ensure both tokens are selected.");
+	  return;
+	}
+  
+	setIsCalculating(true);
+  
+	try {
+	  const amountIn = parseEther(swapFromAmount); // Assumes 18 decimals
+  
+	  const amountsOut = await readContract(config,
+		{
+		  abi: TOKEN_SWAP_ABI,
+		  address: TOKEN_SWAP_ADDRESS as `0x${string}`,
+		},
+		{
+		  functionName: 'getAmountsOut',
+		  args: [
+			amountIn,
+			[swapFromToken as `0x${string}`, swapToToken as `0x${string}`],
+		  ],
+		}
+	  );
+  
+	  console.log("Calculated amountsOut:", amountsOut);
+	  setSwapToAmount(formatUnits((amountsOut as bigint[])[1], 18)); // Assumes 18 decimals on output
+	} catch (error) {
+	  console.error("Error calculating amount out:", error);
+	  alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+	} finally {
+	  setIsCalculating(false);
+	}
   };
+  
 
 
   // Helper function for smooth scrolling (using scrollIntoView)
@@ -1123,20 +1882,7 @@ export default function App() {
   };
 
   // Display transaction status/errors (optional but recommended)
-  useEffect(() => {
-    if (writeContractResult) {
-      console.log('Transaction Sent:', writeContractResult);
-      alert('Transaction Sent! Check your wallet for details and confirmation.');
-      // TODO: Use useWaitForTransactionReceipt for confirmation feedback
-      // Example: const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash: writeContractResult })
-    }
-    if (writeError) {
-      console.error('Transaction Error:', writeError);
-      // Attempt to parse more specific errors if available
-      const message = writeError.message || String(writeError);
-      alert(`Transaction Failed: ${message}`);
-    }
-  }, [writeContractResult, writeError]);
+
 
 
   return (
